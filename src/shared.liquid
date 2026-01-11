@@ -1,21 +1,30 @@
-{% if next_cursor == null or next_cursor == '' %}
-  {% assign downloaded_all_tasks = true %}
-{% else %}
-  {% assign downloaded_all_tasks = false %}
+{% assign tasks = ["results"] %}
+
+{% assign parent_tasks = tasks | reject: "parent_id" %}
+{% assign sub_tasks = tasks | where: "parent_id", nil %}
+
+{% assign subtask_handling = trmnl.plugin_settings.custom_fields_values.subtask_handling %}
+{% if subtask_handling == 'hide' %}
+  {% assign tasks_to_show = parent_tasks %}
+{% endif %}
+{% if subtask_handling == 'show' %}
+  {% assign tasks_to_show = sub_tasks %}
 {% endif %}
 
-{% comment %} {% assign size = 'half_vertical' %}
-{% assign size = 'half_horizontal' %}
-{% assign size = 'quadrant' %} {% endcomment %}
-
-{% assign tasks = ["results"] %}
-{% assign num_tasks = tasks | size %}
+{% comment %} {% assign size = 'quadrant' %} {% endcomment %}
+{% assign max_cols = 2 %}
+{% if size == "half_vertical" %}
+  {% assign max_cols = 1 %}
+{% endif %}
+{% if size == 'quadrant' %}
+  {% assign max_cols = 1 %}
+{% endif %}
 
 <div class="view view--{{ size }}">
   <div class="layout">
-    <div class="columns" data-overflow-max-cols="2">
+    <div class="columns" data-overflow-max-cols="{{ max_cols }}">
       <div class="column gap">
-        {% for task in tasks %}
+        {% for task in tasks_to_show %}
         <div class="item">
           <div class="meta">
             <span class="index">{{ forloop.index }}</span>

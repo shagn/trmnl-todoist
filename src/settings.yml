@@ -24,6 +24,14 @@ custom_fields:
   description: "Optional. The ID of the Todoist project you want to fetch tasks from. Leave empty when you want to fetch tasks from all projects."
   help_text: "You can find the project ID in the URL when viewing the project in Todoist web app. For example, in 'https://app.todoist.com/app/project/nameofyourproject-1234567890', the project ID is '1234567890'."
   optional: true
+- keyname: subtask_handling
+  field_type: select
+  name: Subtask Handling
+  description: "Choose how to handle subtasks in the task list."
+  default_value: hide
+  options:
+  - hide
+  - show
 # uncomment the following lines to use static data for testing  
 # strategy: static
 # static_data: '{
