@@ -1,34 +1,30 @@
-{% if next_cursor == null or next_cursor == '' %}
-  {% assign downloaded_all_tasks = true %}
-{% else %}
-  {% assign downloaded_all_tasks = false %}
+{% assign tasks = ["results"] %}
+
+{% assign parent_tasks = tasks | reject: "parent_id" %}
+{% assign sub_tasks = tasks | where: "parent_id", nil %}
+
+{% assign subtask_handling = trmnl.plugin_settings.custom_fields_values.subtask_handling %}
+{% if subtask_handling == 'hide' %}
+  {% assign tasks_to_show = parent_tasks %}
+{% endif %}
+{% if subtask_handling == 'show' %}
+  {% assign tasks_to_show = sub_tasks %}
 {% endif %}
 
-{% comment %} {% assign size = 'half_vertical' %}
-{% assign size = 'half_horizontal' %}
-{% assign size = 'quadrant' %} {% endcomment %}
-
-{% assign max_tasks_per_column = 9 %}
-{% assign max_num_columns = 2 %}
-{% if size == 'half_vertical' %}
-  {% assign max_num_columns = 1 %}
-{% endif %}
-{% if size == 'half_horizontal' %}
-  {% assign max_tasks_per_column = 5 %}
+{% comment %} {% assign size = 'quadrant' %} {% endcomment %}
+{% assign max_cols = 2 %}
+{% if size == "half_vertical" %}
+  {% assign max_cols = 1 %}
 {% endif %}
 {% if size == 'quadrant' %}
-    {% assign max_num_columns = 1 %}
-    {% assign max_tasks_per_column = 5 %}
+  {% assign max_cols = 1 %}
 {% endif %}
-
-{% assign tasks = data["results"] %}
-{% assign num_tasks = tasks | size %}
 
 <div class="view view--{{ size }}">
   <div class="layout">
-    <div class="columns">
+    <div class="columns" data-overflow-max-cols="{{ max_cols }}">
       <div class="column gap">
-        {% for task in tasks limit:max_tasks_per_column %}
+        {% for task in tasks_to_show %}
         <div class="item">
           <div class="meta">
             <span class="index">{{ forloop.index }}</span>
@@ -43,25 +39,6 @@
         </div>
         {% endfor %}
       </div>
-
-      {% if num_tasks > max_tasks_per_column and max_num_columns == 2 %}
-      <div class="column gap">
-        {% for task in tasks offset:max_tasks_per_column limit:max_tasks_per_column %}
-        <div class="item">
-          <div class="meta">
-            <span class="index">{{ forloop.index | plus: max_tasks_per_column }}</span>
-          </div>
-          <div class="content">
-            <span class="title title--small">{{ task.content }}</span>
-            <span class="description"> {{ task.description }}</span>
-            <div class="flex gap--small">
-              <span class="label label--small"> due: {% if task.due %}{{ task.due.date | date: "%d.%m" }}{% else %} - {% endif %}</span>
-            </div>
-          </div>
-        </div>
-        {% endfor %}
-      </div>
-      {% endif %}
     </div>
   </div>
 

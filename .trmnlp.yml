@@ -4,7 +4,8 @@ watch:
 
 custom_fields: {
   api_key: '<API_KEY',
-  project_id: '<project_id>'
+  project_id: '6fhHx97v9XMxFQjr',
+  subtask_handling: 'show'
 }
 
 variables: 
