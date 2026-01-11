@@ -8,27 +8,14 @@
 {% assign size = 'half_horizontal' %}
 {% assign size = 'quadrant' %} {% endcomment %}
 
-{% assign max_tasks_per_column = 9 %}
-{% assign max_num_columns = 2 %}
-{% if size == 'half_vertical' %}
-  {% assign max_num_columns = 1 %}
-{% endif %}
-{% if size == 'half_horizontal' %}
-  {% assign max_tasks_per_column = 5 %}
-{% endif %}
-{% if size == 'quadrant' %}
-    {% assign max_num_columns = 1 %}
-    {% assign max_tasks_per_column = 5 %}
-{% endif %}
-
-{% assign tasks = data["results"] %}
+{% assign tasks = ["results"] %}
 {% assign num_tasks = tasks | size %}
 
 <div class="view view--{{ size }}">
   <div class="layout">
-    <div class="columns">
+    <div class="columns" data-overflow-max-cols="2">
       <div class="column gap">
-        {% for task in tasks limit:max_tasks_per_column %}
+        {% for task in tasks %}
         <div class="item">
           <div class="meta">
             <span class="index">{{ forloop.index }}</span>
@@ -43,25 +30,6 @@
         </div>
         {% endfor %}
       </div>
-
-      {% if num_tasks > max_tasks_per_column and max_num_columns == 2 %}
-      <div class="column gap">
-        {% for task in tasks offset:max_tasks_per_column limit:max_tasks_per_column %}
-        <div class="item">
-          <div class="meta">
-            <span class="index">{{ forloop.index | plus: max_tasks_per_column }}</span>
-          </div>
-          <div class="content">
-            <span class="title title--small">{{ task.content }}</span>
-            <span class="description"> {{ task.description }}</span>
-            <div class="flex gap--small">
-              <span class="label label--small"> due: {% if task.due %}{{ task.due.date | date: "%d.%m" }}{% else %} - {% endif %}</span>
-            </div>
-          </div>
-        </div>
-        {% endfor %}
-      </div>
-      {% endif %}
     </div>
   </div>
 
