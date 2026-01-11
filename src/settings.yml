@@ -1,0 +1,60 @@
+#
+# Changes to this file will be overwritten by `trmnlp pull`.
+#
+# Docs: https://help.usetrmnl.com/en/articles/10542599-importing-and-exporting-private-plugins#h_581fb988f0
+#
+---
+name: Todoist Tasks
+refresh_interval: 60 # in minutes
+strategy: polling
+polling_url: 'https://api.todoist.com/api/v1/tasks?project_id={{ project_id }}'
+polling_headers: 'Authorization: Bearer {{ api_key }}'
+polling_verb: get
+no_screen_padding: 'no'
+dark_mode: 'no'
+custom_fields: 
+- keyname: api_key
+  field_type: string
+  name: API Key
+  description: "Your Todoist API key"
+  help_text: 'You can find it in your Todoist account settings under the "Integrations" tab: <a href="https://app.todoist.com/app/settings/integrations/developer">Developer Settings</a>'
+- keyname: project_id
+  field_type: string
+  name: Project ID
+  description: "Optional. The ID of the Todoist project you want to fetch tasks from. Leave empty when you want to fetch tasks from all projects."
+  help_text: "You can find the project ID in the URL when viewing the project in Todoist web app. For example, in 'https://app.todoist.com/app/project/nameofyourproject-1234567890', the project ID is '1234567890'."
+  optional: true
+# uncomment the following lines to use static data for testing  
+# strategy: static
+# static_data: '{
+# 	"results": [
+# 		{
+# 			"user_id": "user_id_12345678",
+# 			"id": "task_id_87654321",
+# 			"project_id": "project_id_11223344",
+# 			"section_id": null,
+# 			"parent_id": null,
+# 			"added_by_uid": "user_id_12345678",
+# 			"assigned_by_uid": null,
+# 			"responsible_uid": null,
+# 			"labels": [],
+# 			"deadline": null,
+# 			"duration": null,
+# 			"checked": false,
+# 			"is_deleted": false,
+# 			"added_at": "2025-11-23T20:30:42.023025Z",
+# 			"completed_at": null,
+# 			"completed_by_uid": null,
+# 			"updated_at": "2025-11-23T20:30:42.023041Z",
+# 			"due": null,
+# 			"priority": 1,
+# 			"child_order": 5000,
+# 			"content": "Task title example",
+# 			"description": "",
+# 			"note_count": 0,
+# 			"day_order": -1,
+# 			"is_collapsed": false
+# 		}
+# 	],
+# 	"next_cursor": null
+# }'
